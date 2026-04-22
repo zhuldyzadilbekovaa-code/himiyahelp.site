@@ -4,46 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Химия көмекшісі VIP</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:#000;color:#fff;}
-header{text-align:center;padding:70px 20px;background:#111;}
-header h1{font-size:45px;color:gold;margin-bottom:15px;}
-.container{width:90%;max-width:1000px;margin:auto;padding:40px 0;}
-.box{
-background:#111;
-padding:25px;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:linear-gradient(135deg,#0b1d3a,#102b5e,#153c7a);color:#fff}
+header{text-align:center;padding:60px 20px}
+header h1{font-size:42px;color:#7fd3ff}
+#typing{font-size:24px;height:35px;margin-top:10px;color:#fff}
+.container{width:92%;max-width:1100px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.card,.box{
+background:rgba(255,255,255,0.08);
+padding:22px;
 border-radius:18px;
-border:1px solid gold;
-margin-top:25px;
+backdrop-filter:blur(8px);
+border:1px solid rgba(255,255,255,0.15)
 }
-h2{color:gold;margin-bottom:12px;}
-input{
+h2{color:#7fd3ff;margin-bottom:12px}
+input,button{
 width:100%;
 padding:14px;
 border:none;
 border-radius:10px;
-margin-top:12px;
+margin-top:10px
 }
 button{
-margin-top:15px;
-padding:12px 24px;
-border:none;
-background:gold;
-color:#000;
+background:#7fd3ff;
+color:#001b44;
 font-weight:bold;
-border-radius:10px;
-cursor:pointer;
+cursor:pointer
 }
-footer{
-text-align:center;
-padding:30px;
-color:#888;
-margin-top:40px;
+button:hover{opacity:.9}
+.file-item{
+padding:10px;
+margin-top:10px;
+background:rgba(255,255,255,0.06);
+border-radius:10px
 }
+footer{text-align:center;padding:30px;color:#d0e9ff}
 </style>
 </head>
 
@@ -51,26 +50,62 @@ margin-top:40px;
 
 <header>
 <h1>📘 Химия көмекшісі VIP</h1>
-<p>GitHub Ready Version</p>
+<div id="typing"></div>
 </header>
 
 <div class="container">
 
-<div class="box">
-<h2>📤 Материал жүктеу</h2>
-
-<input type="file" id="fileInput">
-<button onclick="uploadFile()">Файл жүктеу</button>
-
-<p id="status" style="margin-top:15px;color:gold;"></p>
+<div class="grid">
+<div class="card">
+<h2>🤖 AI Мұғалім</h2>
+<p>Химия сұрақтарына жауап береді</p>
 </div>
 
-<div class="box">
-<h2>📝 ҰБТ бөлімі</h2>
+<div class="card">
+<h2>📝 ҰБТ TEST</h2>
+<p>20 сұрақтық дайындық жүйесі</p>
+</div>
 
-<button onclick="openTest()">Тестті ашу</button>
+<div class="card">
+<h2>📚 Материалдар</h2>
+<p>PDF / Word / PPT жүктеу</p>
+</div>
 
-<div id="testArea" style="margin-top:15px;color:#fff;"></div>
+<div class="card">
+<h2>👩‍🏫 Мұғалім бөлімі</h2>
+<p>Сабақ жоспарлары</p>
+</div>
+</div>
+
+<!-- Upload -->
+<div class="box" style="margin-top:25px">
+<h2>📤 Материал жүктеу</h2>
+<input type="file" id="fileInput">
+<button onclick="uploadFile()">Файл жүктеу</button>
+<p id="status" style="margin-top:10px;color:#7fd3ff"></p>
+
+<div id="filesList"></div>
+</div>
+
+<!-- AI -->
+<div class="box" style="margin-top:25px">
+<h2>👩‍🏫 AI Мұғалім</h2>
+<input type="text" id="question" placeholder="NaCl деген не?">
+<button onclick="askAI()">Жіберу</button>
+<p id="answer" style="margin-top:10px;color:#7fd3ff"></p>
+</div>
+
+<!-- TEST -->
+<div class="box" style="margin-top:25px">
+<h2>📝 ҰБТ TEST</h2>
+<div id="quizArea">
+<p id="quizQ"></p>
+<button onclick="check('A')">A</button>
+<button onclick="check('B')">B</button>
+<button onclick="check('C')">C</button>
+<button onclick="check('D')">D</button>
+<p id="quizRes" style="margin-top:10px;color:#7fd3ff"></p>
+</div>
 </div>
 
 </div>
@@ -80,44 +115,93 @@ Author: Жулдыз | © 2026
 </footer>
 
 <script>
+/* typing text */
+let words=["Химия көмекшісі VIP","ҰБТ-ға дайындал!","Материал жүкте!"];
+let w=0,i=0;
+function type(){
+let txt=words[w];
+document.getElementById("typing").innerHTML=txt.slice(0,i++);
+if(i>txt.length){i=0;w=(w+1)%words.length;}
+setTimeout(type,140);
+}
+type();
+
+/* Supabase */
 const supabaseUrl='https://sebjgfsivslubpfarwhu.supabase.co';
 const supabaseKey='sb_publishable_wkjLAJsNYBe2RxLsuhQ1ug_62-h6Wq7';
-
 const client=supabase.createClient(supabaseUrl,supabaseKey);
 
 async function uploadFile(){
-
 const file=document.getElementById("fileInput").files[0];
+if(!file){status.innerHTML="Файл таңдаңыз";return;}
 
-if(!file){
-document.getElementById("status").innerHTML="Файл таңдаңыз";
-return;
-}
-
-document.getElementById("status").innerHTML="Жүктелуде...";
+let clean=Date.now()+"-"+file.name.replace(/[^a-zA-Z0-9.]/g,"_");
 
 const {data,error}=await client.storage
-.from('materials')
-.upload(Date.now()+"-"+file.name,file);
+.from("materials")
+.upload(clean,file);
 
 if(error){
-document.getElementById("status").innerHTML="❌ "+error.message;
+status.innerHTML="❌ "+error.message;
 }else{
-document.getElementById("status").innerHTML="✅ Файл сәтті жүктелді!";
+status.innerHTML="✅ Жүктелді!";
+loadFiles();
 }
 }
 
-function openTest(){
+async function loadFiles(){
+const {data,error}=await client.storage.from("materials").list();
 
-document.getElementById("testArea").innerHTML=
-`
-<h3>1-сұрақ: NaCl деген не?</h3>
-<p>A) Газ</p>
-<p>B) Тұз</p>
-<p>C) Су</p>
-<p>D) Металл</p>
-`;
+let html="";
+if(data){
+data.forEach(f=>{
+html+=`
+<div class="file-item">
+📄 ${f.name}
+</div>`;
+});
 }
+document.getElementById("filesList").innerHTML=html;
+}
+loadFiles();
+
+/* AI */
+function askAI(){
+let q=document.getElementById("question").value.toLowerCase();
+let a="Жауап табылмады";
+
+if(q.includes("nacl")) a="NaCl — Ас тұзы";
+else if(q.includes("h2so4")) a="H2SO4 — Күкірт қышқылы";
+else if(q.includes("hcl")) a="HCl — Тұз қышқылы";
+else if(q.includes("naoh")) a="NaOH — Натрий гидроксиді";
+else if(q.includes("co2")) a="CO2 — Көмірқышқыл газы";
+
+document.getElementById("answer").innerHTML=a;
+}
+
+/* TEST */
+let qs=[
+{q:"NaCl деген не?",c:"B"},
+{q:"H2SO4 деген не?",c:"A"},
+{q:"O2 деген не?",c:"C"}
+];
+let n=0,s=0;
+
+function loadQ(){
+if(n>=qs.length){
+quizArea.innerHTML="<h3>🎯 Нәтиже: "+s+"/"+qs.length+"</h3>";
+return;
+}
+quizQ.innerHTML=(n+1)+". "+qs[n].q+"<br><br>A) Қышқыл<br>B) Тұз<br>C) Оттек<br>D) Металл";
+quizRes.innerHTML="";
+}
+function check(x){
+if(x==qs[n].c){s++;quizRes.innerHTML="✅ Дұрыс";}
+else{quizRes.innerHTML="❌ Қате";}
+n++;
+setTimeout(loadQ,900);
+}
+loadQ();
 </script>
 
 </body>
