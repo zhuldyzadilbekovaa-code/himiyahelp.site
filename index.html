@@ -23,6 +23,96 @@ color:gold;
 text-shadow:0 0 12px gold;
 }
 #typing{
+  <!-- MULTI FILE UPLOAD -->
+<div class="box">
+<h2>📤 Көп файл жүктеу</h2>
+
+<input type="file" id="fileInput" multiple>
+
+<button onclick="uploadFiles()">Файлдарды жүктеу</button>
+
+<p id="status"></p>
+
+<div id="progressArea"></div>
+</div>
+
+<div class="box">
+<h2>📚 Материалдар</h2>
+<div id="filesList"></div>
+</div>
+
+<script>
+const supabaseUrl = "https://sebjgfsivslubpfarwhu.supabase.co";
+const supabaseKey = "YOUR_KEY";
+const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+/* көп файл жүктеу */
+async function uploadFiles(){
+
+const files = document.getElementById("fileInput").files;
+const status = document.getElementById("status");
+
+if(files.length==0){
+status.innerHTML="⚠️ Файл таңдаңыз";
+return;
+}
+
+status.innerHTML="⏳ Жүктелуде...";
+
+for(let i=0;i<files.length;i++){
+
+let file = files[i];
+let name = Date.now()+"-"+file.name.replace(/[^a-zA-Z0-9.]/g,"_");
+
+document.getElementById("progressArea").innerHTML +=
+"<p>📤 "+file.name+"...</p>";
+
+const {error} = await client.storage
+.from("materials")
+.upload(name,file);
+
+if(error){
+document.getElementById("progressArea").innerHTML +=
+"<p style='color:red'>❌ "+file.name+"</p>";
+}else{
+document.getElementById("progressArea").innerHTML +=
+"<p style='color:lime'>✅ "+file.name+"</p>";
+}
+
+}
+
+status.innerHTML="🎉 Барлығы жүктелді!";
+loadFiles();
+}
+
+/* файлдар тізімі */
+async function loadFiles(){
+
+const {data} = await client.storage
+.from("materials")
+.list();
+
+let html="";
+
+data.forEach(file=>{
+
+let url=supabaseUrl+
+"/storage/v1/object/public/materials/"+file.name;
+
+html += `
+<div class="file">
+📄 ${file.name}<br>
+<a href="${url}" target="_blank">⬇️ Жүктеу</a>
+</div>
+`;
+
+});
+
+document.getElementById("filesList").innerHTML=html;
+}
+
+loadFiles();
+</script>
 margin-top:10px;
 font-size:22px;
 height:30px;
