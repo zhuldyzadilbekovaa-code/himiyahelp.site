@@ -313,7 +313,7 @@ return;
 
 statusEl.innerHTML="⏳ Жүктелуде...";
 
-let clean=Date.now()+"-"+file.name.replace(/[^a-zA-Z0-9.]/g,"_");
+let clean=file.name;
 
 const {error}=await client.storage
 .from("materials")
