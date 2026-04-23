@@ -41,6 +41,16 @@ text-shadow:0 0 12px gold;
 <div id="filesList"></div>
 </div>
 <h2>📚 Материалдар тізімі</h2>
+ <select id="categoryFilter" onchange="filterFiles()">
+<option value="all">Барлығы</option>
+<option value="9synyp">9 сынып</option>
+<option value="10synyp">10 сынып</option>
+<option value="11synyp">11 сынып</option>
+<option value="UBT">ҰБТ</option>
+<option value="QMJ">ҚМЖ</option>
+<option value="PPT">Презентация</option>
+</select>
+JavaScript: 
 <script>
 const supabaseUrl = "https://sebjgfsivslubpfarwhu.supabase.co";
 const supabaseKey = "YOUR_KEY";
