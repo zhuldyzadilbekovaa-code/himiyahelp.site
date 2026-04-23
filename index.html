@@ -4,455 +4,142 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Химия көмекшісі VIP</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
 body{
-background:linear-gradient(135deg,#000,#111,#1a1a1a);
-color:#fff;
+background:#0b0b0b;
+color:white;
+padding:20px;
 }
-header{
+
+h1{
 text-align:center;
-padding:60px 20px;
-border-bottom:1px solid gold;
-}
-header h1{
-font-size:42px;
 color:gold;
-text-shadow:0 0 12px gold;
-}
-#typing{
-  <!-- MULTI FILE UPLOAD -->
-<div class="box">
-<h2>📤 Көп файл жүктеу</h2>
-
-<input type="file" id="fileInput" multiple>
-
-<button onclick="uploadFiles()">Файлдарды жүктеу</button>
-
-<p id="status"></p>
-
-<div id="progressArea"></div>
-</div>
-
-<div class="box">
-<h2>📚 Материалдар</h2>
-<div id="filesList"></div>
-</div>
-<h2>📚 Материалдар тізімі</h2>
- <select id="categoryFilter" onchange="filterFiles()">
-<option value="all">Барлығы</option>
-<option value="9synyp">9 сынып</option>
-<option value="10synyp">10 сынып</option>
-<option value="11synyp">11 сынып</option>
-<option value="UBT">ҰБТ</option>
-<option value="QMJ">ҚМЖ</option>
-<option value="PPT">Презентация</option>
-</select>
-
-const supabaseUrl = "https://sebjgfsivslubpfarwhu.supabase.co";
-const supabaseKey = "YOUR_KEY";
-const client = supabase.createClient(supabaseUrl, supabaseKey);
-
-/* көп файл жүктеу */
-async function uploadFiles(){
-
-const files = document.getElementById("fileInput").files;
-const status = document.getElementById("status");
-
-if(files.length==0){
-status.innerHTML="⚠️ Файл таңдаңыз";
-return;
+margin-bottom:30px;
+font-size:42px;
 }
 
-status.innerHTML="⏳ Жүктелуде...";
-
-for(let i=0;i<files.length;i++){
-
-let file = files[i];
-let name = file.name;
-document.getElementById("progressArea").innerHTML +=
-"<p>📤 "+file.name+"...</p>";
-
-const {error} = await client.storage
-.from("materials")
-.upload(name,file);
-
-if(error){
-document.getElementById("progressArea").innerHTML +=
-"<p style='color:red'>❌ "+file.name+"</p>";
-}else{
-document.getElementById("progressArea").innerHTML +=
-"<p style='color:lime'>✅ "+file.name+"</p>";
-}
-
-}
-
-status.innerHTML="🎉 Барлығы жүктелді!";
-loadFiles();
-}
-
-/* файлдар тізімі */
-async function loadFiles(){
-
-const {data} = await client.storage
-.from("materials")
-.list();
-
-let html="";
-
-data.forEach(file=>{
-
-let url=supabaseUrl+
-"/storage/v1/object/public/materials/"+file.name;
-
-html += `
-<div class="file">
-📄 ${file.name}<br>
-<a href="${url}" target="_blank">⬇️ Жүктеу</a>
-</div>
-`;
-
-});
-
-document.getElementById("filesList").innerHTML=html;
-}
-
-loadFiles();
-</script>
-margin-top:10px;
-font-size:22px;
-height:30px;
-}
-.container{
-width:92%;
-max-width:1150px;
-margin:auto;
-padding:25px;
-}
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-}
-.card,.box{
-background:#111;
+.box{
+background:#151515;
 border:1px solid gold;
-border-radius:18px;
-padding:22px;
-margin-top:22px;
-box-shadow:0 0 10px rgba(255,215,0,.08);
+border-radius:15px;
+padding:20px;
+margin-bottom:25px;
 }
+
 h2{
 color:gold;
-margin-bottom:12px;
+margin-bottom:15px;
 }
-input,button{
+
+input,select{
 width:100%;
-padding:14px;
-margin-top:10px;
+padding:12px;
+margin-bottom:12px;
 border:none;
 border-radius:10px;
 font-size:16px;
 }
-input{
-background:#1d1d1d;
-color:#fff;
-}
+
 button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
 background:gold;
-color:#000;
+font-size:18px;
 font-weight:bold;
 cursor:pointer;
 }
-button:hover{opacity:.9}
+
+button:hover{
+background:#ffd700;
+}
+
 .file{
-background:#1a1a1a;
-padding:12px;
+background:#222;
+padding:15px;
 border-radius:10px;
-margin-top:10px;
+margin-bottom:10px;
+display:block;
 }
-a.download{
-display:inline-block;
-margin-top:8px;
-padding:8px 14px;
-background:gold;
-color:#000;
+
+a{
+color:white;
 text-decoration:none;
-border-radius:8px;
-font-weight:bold;
 }
-.chat-user{
-background:#1e1e1e;
-padding:12px;
-border-radius:14px;
-margin-top:10px;
-text-align:right;
-}
-.chat-ai{
-background:gold;
-color:#000;
-padding:12px;
-border-radius:14px;
-margin-top:10px;
-font-weight:bold;
-}
-.answer-btns{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:10px;
-}
-footer{
-text-align:center;
-padding:30px;
-color:#999;
-margin-top:40px;
-border-top:1px solid #222;
+
+small{
+color:#aaa;
 }
 </style>
 </head>
 
 <body>
 
-<header>
 <h1>📘 Химия көмекшісі VIP</h1>
-<div id="typing"></div>
-</header>
 
-<div class="container">
-
-<div class="grid">
-<div class="card">
-<h2>🤖 AI Мұғалім</h2>
-<p>3 тілде жауап береді</p>
-</div>
-
-<div class="card">
-<h2>📝 ҰБТ TEST</h2>
-<p>20 сұрақтық химия тесті</p>
-</div>
-
-<div class="card">
-<h2>📚 Материалдар</h2>
-<p>Химияға арналған материалдар базасы</p>
-</div>
-
-<div class="card">
-<h2>👩‍🏫 Мұғалімдерге</h2>
-<p>Пайдалы сабақ ресурстары</p>
-</div>
-</div>
-
-<!-- Upload -->
-<div class="box">
-<h2>📤 Материал жүктеу</h2>
-<input type="file" id="fileInput">
-<button type="button" onclick="uploadFile()">Файл жүктеу</button>
-<p id="status" style="margin-top:10px;color:gold"></p>
-</div>
-
-<!-- File List -->
+<!-- Материалдар -->
 <div class="box">
 <h2>📚 Материалдар тізімі</h2>
-<div id="filesList"></div>
+
+<input type="text" id="searchInput" placeholder="🔍 Іздеу..." onkeyup="searchFiles()">
+
+<select id="categoryFilter" onchange="filterFiles()">
+<option value="all">Барлығы</option>
+<option value="9synyp">9 сынып</option>
+<option value="10synyp">10 сынып</option>
+<option value="11synyp">11 сынып</option>
+<option value="ubt">ҰБТ</option>
+<option value="qmj">ҚМЖ</option>
+<option value="ppt">Презентация</option>
+</select>
+
+<div class="file">9synyp_test1.pdf</div>
+<div class="file">10synyp_qmj.docx</div>
+<div class="file">11synyp_test.docx</div>
+<div class="file">UBT_formula.pdf</div>
+<div class="file">QMJ_alkandar.docx</div>
+<div class="file">PPT_organika.pptx</div>
+
+</div>
+
+<!-- Мұғалімдерге -->
+<div class="box">
+<h2 onclick="toggleTeacher()" style="cursor:pointer;">👩‍🏫 Мұғалімдерге ▼</h2>
+
+<div id="teacherBox" style="display:none; margin-top:15px;">
+
+<div class="file">📄 ҚМЖ үлгілері</div>
+<div class="file">📄 Сабақ жоспарлары</div>
+<div class="file">📄 БЖБ / ТЖБ материалдары</div>
+<div class="file">📄 Презентациялар</div>
+<div class="file">📄 Әдістемелік көмек</div>
+
+</div>
 </div>
 
 <!-- AI -->
 <div class="box">
-<h2>🤖 AI Мұғалім PRO</h2>
-<input type="text" id="question" placeholder="Сұрақ жазыңыз...">
-<button type="button" onclick="askAI()">Жіберу</button>
-<div id="chatArea" style="margin-top:15px"></div>
+<h2>🤖 AI Мұғалім</h2>
+<input type="text" placeholder="Сұрақ жазыңыз...">
+<button>Жіберу</button>
 </div>
 
-<!-- TEST -->
+<!-- ҰБТ -->
 <div class="box">
 <h2>📝 ҰБТ TEST</h2>
-<div id="quizBox">
-<p id="q"></p>
-
-<div class="answer-btns">
-<button onclick="check('A')">A</button>
-<button onclick="check('B')">B</button>
-<button onclick="check('C')">C</button>
-<button onclick="check('D')">D</button>
+<p>20 сұрақтық тест бөлімі</p>
+<button>Тест бастау</button>
 </div>
 
-<p id="res" style="margin-top:10px;color:gold"></p>
-</div>
-</div>
-
-</div>
-
-<footer>
-Author: Жулдыз | © 2026
-</footer>
-
-<script>
-/* typing */
-let words=["Химия көмекшісі VIP","ҰБТ-ға дайындал!","Материалдар базасы","AI Мұғалім PRO"];
-let wi=0,li=0;
-function type(){
-let t=words[wi];
-document.getElementById("typing").innerHTML=t.slice(0,li++);
-if(li>t.length){
-li=0;
-wi=(wi+1)%words.length;
-}
-setTimeout(type,120);
-}
-type();
-
-/* Supabase */
-const supabaseUrl='https://sebjgfsivslubpfarwhu.supabase.co';
-const supabaseKey='sb_publishable_wkjLAJsNYBe2RxLsuhQ1ug_62-h6Wq7';
-const client=supabase.createClient(supabaseUrl,supabaseKey);
-
-/* Upload */
-async function uploadFile(){
-const statusEl=document.getElementById("status");
-const file=document.getElementById("fileInput").files[0];
-
-if(!file){
-statusEl.innerHTML="⚠️ Файл таңдаңыз";
-return;
-}
-
-statusEl.innerHTML="⏳ Жүктелуде...";
-
-let clean=file.name;
-
-const {error}=await client.storage
-.from("materials")
-.upload(clean,file);
-
-if(error){
-statusEl.innerHTML="❌ "+error.message;
-}else{
-statusEl.innerHTML="✅ Жүктелді!";
-document.getElementById("fileInput").value="";
-loadFiles();
-}
-}
-
-/* Load files */
-async function loadFiles(){
-const {data}=await client.storage.from("materials").list();
-
-let html="";
-if(data){
-data.forEach(file=>{
-let url=supabaseUrl+"/storage/v1/object/public/materials/"+file.name;
-html+=`
-<div class="file">
-📄 ${file.name}<br>
-<a class="download" href="${url}" target="_blank">⬇️ Жүктеу</a>
-</div>
-`;
-});
-}
-document.getElementById("filesList").innerHTML=html;
-}
-loadFiles();
-
-/* AI */
-function askAI(){
-let q=document.getElementById("question").value.trim();
-if(q=="") return;
-
-let text=q.toLowerCase();
-let answer="🇰🇿 Жауап табылмады. 🇷🇺 Ответ не найден. 🇬🇧 Answer not found.";
-
-if(text.includes("nacl")) answer="🇰🇿 Ас тұзы 🇷🇺 Поваренная соль 🇬🇧 Table salt";
-else if(text.includes("h2so4")) answer="🇰🇿 Күкірт қышқылы 🇷🇺 Серная кислота 🇬🇧 Sulfuric acid";
-else if(text.includes("hcl")) answer="🇰🇿 Тұз қышқылы 🇷🇺 Соляная кислота 🇬🇧 Hydrochloric acid";
-else if(text.includes("naoh")) answer="🇰🇿 Натрий гидроксиді 🇷🇺 Гидроксид натрия 🇬🇧 Sodium hydroxide";
-else if(text.includes("co2")) answer="🇰🇿 Көмірқышқыл газы 🇷🇺 Углекислый газ 🇬🇧 Carbon dioxide";
-else if(text.includes("o2")) answer="🇰🇿 Оттек 🇷🇺 Кислород 🇬🇧 Oxygen";
-else if(text.includes("h2o")) answer="🇰🇿 Су 🇷🇺 Вода 🇬🇧 Water";
-else if(text.includes("kmno4")) answer="🇰🇿 Калий перманганаты 🇷🇺 Перманганат калия 🇬🇧 Potassium permanganate";
-else if(text.includes("моль")) answer="🇰🇿 Формула: n=m/M 🇷🇺 Формула моля: n=m/M 🇬🇧 Mole formula: n=m/M";
-
-document.getElementById("chatArea").innerHTML +=
-"<div class='chat-user'>"+q+"</div>"+
-"<div class='chat-ai'>"+answer+"</div>";
-
-document.getElementById("question").value="";
-}
-
-/* TEST */
-let qs=[
-["NaCl деген не?","Қышқыл","Тұз","Газ","Металл","B"],
-["H2SO4 деген не?","Күкірт қышқылы","Су","Газ","Тұз","A"],
-["O2 қандай зат?","Тұз","Металл","Оттек","Қышқыл","C"],
-["HCl деген не?","Тұз қышқылы","Сілті","Газ","Металл","A"],
-["NaOH деген не?","Газ","Тұз","Қышқыл","Сілті","D"],
-["CO2 қандай газ?","Сутек","Көмірқышқыл","Оттек","Азот","B"],
-["H2O деген не?","Қышқыл","Су","Тұз","Металл","B"],
-["Au белгісі?","Күміс","Алтын","Темір","Мыс","B"],
-["Fe белгісі?","Темір","Мырыш","Күміс","Натрий","A"],
-["Cu белгісі?","Кальций","Көміртек","Мыс","Хлор","C"],
-["Zn белгісі?","Мырыш","Азот","Калий","Натрий","A"],
-["He қандай газ?","Гелий","Сутек","Оттек","Азот","A"],
-["CH4 деген не?","Метан","Этан","Су","Тұз","A"],
-["pH<7 қандай орта?","Сілтілі","Бейтарап","Қышқыл","Тұзды","C"],
-["NaCl қай класс?","Тұз","Қышқыл","Оксид","Сілті","A"],
-["KOH деген не?","Қышқыл","Тұз","Сілті","Газ","C"],
-["CaCO3 деген не?","Әктас","Су","Металл","Қышқыл","A"],
-["N2 қандай газ?","Азот","Оттек","Хлор","Гелий","A"],
-["Ag белгісі?","Алтын","Күміс","Темір","Мыс","B"],
-["Mg белгісі?","Магний","Марганец","Мыс","Метан","A"]
-];
-
-let n=0,s=0,wrong=[];
-
-function loadQ(){
-if(n>=qs.length){
-let percent=Math.round((s/qs.length)*100);
-let html="<h2>🎯 Нәтиже: "+s+"/"+qs.length+"</h2>";
-html+="<p>📊 Пайыз: "+percent+"%</p>";
-
-if(wrong.length>0){
-html+="<br><h3>❌ Қате сұрақтар:</h3>";
-wrong.forEach(w=>{
-html+="<p>"+w+"</p>";
-});
-}
-
-document.getElementById("quizBox").innerHTML=html;
-return;
-}
-
-let x=qs[n];
-document.getElementById("q").innerHTML=
-(n+1)+". "+x[0]+"<br><br>"+
-"A) "+x[1]+"<br>"+
-"B) "+x[2]+"<br>"+
-"C) "+x[3]+"<br>"+
-"D) "+x[4];
-
-document.getElementById("res").innerHTML="";
-}
-
-function check(ans){
-let correct=qs[n][5];
-
-if(ans==correct){
-s++;
-document.getElementById("res").innerHTML="✅ Дұрыс";
-}else{
-document.getElementById("res").innerHTML="❌ Қате";
-wrong.push((n+1)+". "+qs[n][0]+" → Дұрыс жауабы: "+correct);
-}
-
-n++;
-setTimeout(loadQ,700);
-}
-
-loadQ();
-</script>
 <script>
 function searchFiles(){
 let input=document.getElementById("searchInput").value.toLowerCase();
@@ -460,7 +147,7 @@ let files=document.querySelectorAll(".file");
 
 files.forEach(file=>{
 let text=file.innerText.toLowerCase();
-file.style.display=text.includes(input)?"block":"none";
+file.style.display=text.includes(input) ? "block" : "none";
 });
 }
 
@@ -478,6 +165,17 @@ file.style.display="none";
 }
 });
 }
+
+function toggleTeacher(){
+let box=document.getElementById("teacherBox");
+
+if(box.style.display=="none"){
+box.style.display="block";
+}else{
+box.style.display="none";
+}
+}
 </script>
+
 </body>
 </html>
