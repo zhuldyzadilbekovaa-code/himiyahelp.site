@@ -1,0 +1,16 @@
+{
+  "name": "Химия көмекшісі VIP",
+  "short_name": "Химия VIP",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ffd700",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2784/2784487.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
