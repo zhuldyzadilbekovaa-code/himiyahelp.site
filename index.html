@@ -50,31 +50,7 @@ text-shadow:0 0 12px gold;
 <option value="QMJ">ҚМЖ</option>
 <option value="PPT">Презентация</option>
 </select>
-JavaScript: 
-<script> function searchFiles(){
-let input=document.getElementById("searchInput").value.toLowerCase();
-let files=document.querySelectorAll(".file");
 
-files.forEach(file=>{
-let text=file.innerText.toLowerCase();
-file.style.display=text.includes(input)?"block":"none";
-});
-}
-
-function filterFiles(){
-let val=document.getElementById("categoryFilter").value.toLowerCase();
-let files=document.querySelectorAll(".file");
-
-files.forEach(file=>{
-let text=file.innerText.toLowerCase();
-
-if(val=="all" || text.includes(val)){
-file.style.display="block";
-}else{
-file.style.display="none";
-}
-});
-}
 const supabaseUrl = "https://sebjgfsivslubpfarwhu.supabase.co";
 const supabaseKey = "YOUR_KEY";
 const client = supabase.createClient(supabaseUrl, supabaseKey);
@@ -477,6 +453,31 @@ setTimeout(loadQ,700);
 
 loadQ();
 </script>
+<script>
+function searchFiles(){
+let input=document.getElementById("searchInput").value.toLowerCase();
+let files=document.querySelectorAll(".file");
 
+files.forEach(file=>{
+let text=file.innerText.toLowerCase();
+file.style.display=text.includes(input)?"block":"none";
+});
+}
+
+function filterFiles(){
+let val=document.getElementById("categoryFilter").value.toLowerCase();
+let files=document.querySelectorAll(".file");
+
+files.forEach(file=>{
+let text=file.innerText.toLowerCase();
+
+if(val=="all" || text.includes(val)){
+file.style.display="block";
+}else{
+file.style.display="none";
+}
+});
+}
+</script>
 </body>
 </html>
