@@ -130,14 +130,89 @@ margin-top:40px;
 <div id="filesList"></div>
 </div>
 
-<!-- AI -->
+<!-- 🤖 AI PRO FINAL -->
 <div class="box">
-<h2>👩‍🏫 AI Мұғалім</h2>
-<input type="text" id="question" placeholder="NaCl деген не?">
+<h2>🤖 AI Мұғалім PRO</h2>
+
+<input type="text" id="question" placeholder="Сұрақ жазыңыз...">
+
 <button onclick="askAI()">Жіберу</button>
-<p id="answer" style="margin-top:10px;color:gold"></p>
+
+<div id="chatArea" style="margin-top:15px;"></div>
 </div>
 
+<style>
+.chat-user{
+background:#1e1e1e;
+padding:12px;
+border-radius:14px;
+margin-top:10px;
+text-align:right;
+color:#fff;
+}
+
+.chat-ai{
+background:gold;
+color:#000;
+padding:12px;
+border-radius:14px;
+margin-top:10px;
+font-weight:bold;
+}
+</style>
+
+<script>
+function askAI(){
+
+let q=document.getElementById("question").value.trim();
+if(q=="") return;
+
+let text=q.toLowerCase();
+let answer="🇰🇿 Жауап табылмады. 🇷🇺 Ответ не найден. 🇬🇧 Answer not found.";
+
+if(text.includes("nacl"))
+answer="🇰🇿 Ас тұзы | 🇷🇺 Поваренная соль | 🇬🇧 Table salt";
+
+else if(text.includes("h2so4"))
+answer="🇰🇿 Күкірт қышқылы | 🇷🇺 Серная кислота | 🇬🇧 Sulfuric acid";
+
+else if(text.includes("hcl"))
+answer="🇰🇿 Тұз қышқылы | 🇷🇺 Соляная кислота | 🇬🇧 Hydrochloric acid";
+
+else if(text.includes("naoh"))
+answer="🇰🇿 Натрий гидроксиді | 🇷🇺 Гидроксид натрия | 🇬🇧 Sodium hydroxide";
+
+else if(text.includes("co2"))
+answer="🇰🇿 Көмірқышқыл газы | 🇷🇺 Углекислый газ | 🇬🇧 Carbon dioxide";
+
+else if(text.includes("o2"))
+answer="🇰🇿 Оттек | 🇷🇺 Кислород | 🇬🇧 Oxygen";
+
+else if(text.includes("h2o"))
+answer="🇰🇿 Су | 🇷🇺 Вода | 🇬🇧 Water";
+
+else if(text.includes("kmno4"))
+answer="🇰🇿 Калий перманганаты | 🇷🇺 Перманганат калия | 🇬🇧 Potassium permanganate";
+
+else if(text.includes("ph<7"))
+answer="🇰🇿 Қышқыл орта | 🇷🇺 Кислая среда | 🇬🇧 Acidic medium";
+
+else if(text.includes("моль") || text.includes("mole"))
+answer="🇰🇿 Формула: n = m / M | 🇷🇺 Формула: n = m / M | 🇬🇧 Formula: n = m / M";
+
+else if(text.includes("валент"))
+answer="🇰🇿 Валенттілік — атомның байланысу қабілеті | 🇷🇺 Валентность атома | 🇬🇧 Valency of atom";
+
+else if(text.includes("ұбт"))
+answer="🇰🇿 ҰБТ-ға дайындықты бастаймыз! | 🇷🇺 Подготовка к ЕНТ | 🇬🇧 Let's prepare for exam!";
+
+document.getElementById("chatArea").innerHTML +=
+"<div class='chat-user'>"+q+"</div>" +
+"<div class='chat-ai'>"+answer+"</div>";
+
+document.getElementById("question").value="";
+}
+</script>
 <!-- TEST -->
 <div class="box">
 <h2>📝 ҰБТ TEST</h2>
