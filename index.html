@@ -1,3 +1,5 @@
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffd700">
 <!DOCTYPE html>
 <html lang="kk">
 <head>
@@ -444,6 +446,10 @@ setTimeout(loadQ,700);
 
 loadQ();
 </script>
-
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+</script>
 </body>
 </html>
